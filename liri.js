@@ -11,56 +11,116 @@ require("dotenv").config();
 // if applicable keep using forEach and .map, .filter, .reduce
 // also arrow functions
 
+const fs = require('fs');
 
-let axios = require('axios');
+const moment = require('moment');
+
+const spotify = require('node-spotify-api');
+
+const keys = require('./keys.js');
+
+const axios = require('axios');
 
 let command = process.argv[2];
-let search = process.argv.slice(3).join(' ');
+let search = process.argv.slice(3).join('+');
 
 switch (command) {
-    case 'concer':
-    concert();
-    break;
+    case 'concertThis':
+        concertThis();
+        break;
 
-    case 'spotify':
-    spotify();
-    break;
+    case 'spotifyThisSong':
+        spotifyThisSong();
+        break;
 
-    case 'movie':
-    movie();
-    break;
+    case 'movieThis':
+        movieThis();
+        break;
 
     case 'doWhatItSays':
-    doWhatItSays();
-    break;
+        doWhatItSays();
+        break;
 };
 
 
 // once i get the function working try creating it with an arrow function for practice
-// 
-// 
-// 
-// 
 
-function concert() {
+function concertThis() {
 
+    let artist = search;
+
+    let queryUrl = 'https://rest.bandsintown.com/artists/' + artist + '/events?app_id=codingbootcamp';
+    console.log(queryUrl);
+
+    axios.get(queryUrl).then(function(response) {
+        console.log('Concert info: ' + response.venue.name)
+        console.log('Concert info: ' + response.venue.city)
+        // need to find path to retrieve name of venue, venue location, and date of event
+    })
 };
 
 
 
-function spotify() {
+function spotifyThisSong() {
 
+    spotify.search({
+        type: 'track',
+        query: search,
+    }), function(error, data) {
+        if (error) {
+            return console.log('What is this thing an error' + error)
+        }
+
+        let song = data.tracks.item[i];
+        let artist = songInfo.artists[0].name;
+        let preview = data.tracks.item[0].preview_url;
+        let album = data.tracks.item[0].album.name;
+
+        console.log('Song: ' + song);
+        console.log('Artist: ' + artist);
+        console.log('Album: ' + album);
+        console.log('Preview: ' + preview);
+
+    }
 };
 
 
 
-function movie() {
+function movieThis() {
+
+    let movieName = search;
+
+    let queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+    console.log(queryUrl);
+
+    axios.get(queryUrl).then(function (response) {
+        console.log('Movie title: ' + response.data.Title);
+        console.log('Movie release year: ' + response.data.Year);
+        console.log('Movie imdbRating: ' + response.data.imdbRating);
+        console.log('Movie rating: ' + response.data.Ratings[0].Value);
+        console.log('Movie country: ' + response.data.Country);
+        console.log('Movie language: ' + response.data.Language);
+        console.log('Movie plot: ' + response.data.Plot);
+        console.log('Movie actors: ' + response.data.Actors);
+    })
 
 };
 
 
 
 function doWhatItSays() {
-    
+
+    fs.readFile('random.txt', 'utf8', function(error, data) {
+        if (error) {
+            return console.log(error);
+        };
+
+        console.log(data);
+
+        let dataArr = data.split(',');
+
+        console.log(dataArr);
+    })
+
 };
 

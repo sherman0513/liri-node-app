@@ -15,9 +15,9 @@ const fs = require('fs');
 
 const moment = require('moment');
 
-const spotify = require('node-spotify-api');
-
 const keys = require('./keys.js');
+
+const Spotify = require('node-spotify-api');
 
 const axios = require('axios');
 
@@ -40,10 +40,8 @@ switch (command) {
     case 'doWhatItSays':
         doWhatItSays();
         break;
+
 };
-
-
-// once i get the function working try creating it with an arrow function for practice
 
 function concertThis() {
 
@@ -52,36 +50,61 @@ function concertThis() {
     let queryUrl = 'https://rest.bandsintown.com/artists/' + artist + '/events?app_id=codingbootcamp';
     console.log(queryUrl);
 
+
+    // need to create a loop to loop through all the responses
     axios.get(queryUrl).then(function(response) {
-        console.log('Concert info: ' + response.venue.name)
-        console.log('Concert info: ' + response.venue.city)
-        // need to find path to retrieve name of venue, venue location, and date of event
+        //if (error) console.log(error);
+        console.log("json ", JSON.stringify(response.data[0], null, 2));
+        let obj = response.data[0];
+        let artist = obj.lineup;
+        let venue = obj.venue.name;
+        let location = obj.venue.city;
+        let state = obj.venue.region;
+        let time = moment(obj.datetime).format('dddd, MMM Do YYYY')
+
+
+        console.log("Artist: " + artist);
+        console.log("Venue: " + venue);
+        console.log("City: " + location);
+        console.log("State: " + state);
+        console.log("Time: " + time);
+
     })
 };
 
 
 
+// what is needed to retrieve from spotify
+// Artist(s)
+// The song's name
+// A preview link of the song from Spotify
+// The album that the song is from
 function spotifyThisSong() {
 
-    spotify.search({
-        type: 'track',
-        query: search,
-    }), function(error, data) {
-        if (error) {
-            return console.log('What is this thing an error' + error)
-        }
+    let spotify = new Spotify(keys.spotify);
+       
+      spotify
+        .search({ type: 'track', query: search })
+        .then(function(data) {
+        //   console.log(data);
 
-        let song = data.tracks.item[i];
-        let artist = songInfo.artists[0].name;
-        let preview = data.tracks.item[0].preview_url;
-        let album = data.tracks.item[0].album.name;
+          let artist = data.tracks.items[0].album.artists[0].name;
+          let preview = data.tracks.items[0].preview_url;
+          let song = data.tracks.items[0].name;
+          let album = data.tracks.items[0].album.name;
+  
+          console.log('Artist: ' + JSON.stringify(artist, null, 2));
+          console.log('Song: ' + JSON.stringify(song, null, 2));
+          console.log('Album: ' + JSON.stringify(album, null, 2));
+          console.log('Preview: ' + JSON.stringify(preview, null, 2));
 
-        console.log('Song: ' + song);
-        console.log('Artist: ' + artist);
-        console.log('Album: ' + album);
-        console.log('Preview: ' + preview);
 
-    }
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+
+
 };
 
 

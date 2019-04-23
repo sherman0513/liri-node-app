@@ -5,7 +5,6 @@ require("dotenv").config();
 // after looking through homework bank.js will be useful: similar as in need to use switch and case part of activity for liri because the app needs to take in different commands
 // reference other activities to know what let/const to create
 // in reference to bank ex. liri app will should have 4 functions? one for each of the different commands based on hw instructions...?
-// functions should be relatively the same just need to solve one and rest should follow(will need let/const added as well)
 
 // ---focus on using let and const instead of var---
 // if applicable keep using forEach and .map, .filter, .reduce
@@ -51,7 +50,7 @@ function concertThis() {
     console.log(queryUrl);
 
 
-    // need to create a loop to loop through all the responses
+    // need to create a loop so that the loop will go through all the responses
     axios.get(queryUrl).then(function(response) {
         //if (error) console.log(error);
         console.log("json ", JSON.stringify(response.data[0], null, 2));

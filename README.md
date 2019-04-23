@@ -8,6 +8,7 @@ The way the app works:
 -below is what each function does
 
 
+
 -Concert
 node liri.js concertThis <insert artist>
 
@@ -16,6 +17,7 @@ This will search using the Bands in Town Artist Events API ("https://rest.bandsi
 Name of the venue
 Venue location
 Date of the Event
+
 
 
 -Spotify
@@ -28,6 +30,7 @@ The song's name
 A preview link of the song from Spotify
 The album that the song is from
 If no song is provided then your program will default to "The Sign" by Ace of Base
+
 
 
 Movies
@@ -45,6 +48,7 @@ Actors in the movie.
 Rotten Tomatoes Rating.
 Rotten Tomatoes URL.
 If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
+
 
 
 Do What It Says
